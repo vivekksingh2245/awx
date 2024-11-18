@@ -1,0 +1,26 @@
+- name: Installing nginx on ansible server
+  hosts:  all
+  remote_user: ubuntu
+  become: yes  # Include gathering facts
+  tasks:
+    - name: install nginx
+      apt:
+        name: nginx
+        state: latest
+    - name: start nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+    - name:  Copying the html files to the server.
+      copy:
+        src: /home/ubuntu/ansible/index.html
+        dest: /var/www/html
+    - name: Copy config file to Nginx config directory
+      copy:
+        src: /etc/nginx/sites-enabled/default
+        dest: /etc/nginx/default
+    - name: restart nginx
+      service: 
+        name: nginx 
+        state: restarted
